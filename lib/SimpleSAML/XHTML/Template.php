@@ -327,7 +327,15 @@ class SimpleSAML_XHTML_Template
             $templateName = $tmp[0];
         }
 
-        $tmp = explode(':', $this->configuration->getString('theme.use', 'default'), 2);
+        if (array_key_exists('SPMetadata', $this->data) && array_key_exists('theme.use', $this->data['SPMetadata'])) {
+            $theme_use = $this->data['SPMetadata']['theme.use'];
+            if (is_callable($this->data['SPMetadata'], 'theme.use') {
+                $theme_use = $theme_use($this);
+            }
+        } else {
+            $theme_use = $this->configuration->getString('theme.use', 'default');
+        }
+        $tmp = explode(':', $theme_use, 2);
         if (count($tmp) === 2) {
             $themeModule = $tmp[0];
             $themeName = $tmp[1];
